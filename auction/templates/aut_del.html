@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block title %} {% endblock title %} {% block content %}
+<h2>Auction Details</h2>
+
+<ul>
+
+    <li>
+
+        <img src="{{data.auction_image}}" alt="" width="50px">
+    </li>
+    <li>
+        Auction name : {{data.auction_name}}
+    </li>
+    <li>
+        Desc : {{data.auction_desc}}
+    </li>
+    <li>
+        Start Price : {{data.auction_price}} RS.
+    </li>
+    <li>
+        Current Price : {{data.auction_running_price}} Rs.
+    </li>
+    <li>
+        Strat Date : {{data.auction_startDate}}
+    </li>
+    <li>
+        End Date : {{data.auction_endDate}}
+    </li>
+</ul>
+
+{% if messages %} 
+    {% for msg in messages %}
+<p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+    {% endfor %}
+ {% endif %}
+<form action="" method="post" novalidate>
+    {% csrf_token %}
+     {% if form.non_field_errors %} 
+     {% for error in form.non_field_errors %} 
+     {{error}} {% endfor %} {% endif %} {% for fm in form %} {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> 
+     {% endfor %}
+    <input type='submit' value='Biding'>
+</form>
+</body {% endblock content %}

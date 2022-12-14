@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Registration page{% endblock title %}
+{% block content %}
+
+{% if messages %} {% for msg in messages %}
+    <small {% if msg.tags %} class="text-success" {% endif %}>{{msg}}</small>
+    {% endfor %} {% endif %}
+<div class="containerS">
+<h2 class="hea">Registration</h2><br>
+    
+    <form action="" method="post" novalidate>
+        {% csrf_token %} 
+        {% if form.non_field_errors %}
+         {% for error in form.non_field_errors %}
+          <small class="text-danger">{{error}}</small>
+          {% endfor %}
+           {% endif %} 
+           {% for fm in form %}
+            {{fm.label_tag}} {{fm}} {% if fm.errors %}<br><small class="text-danger">{{fm.errors|striptags}}</small>{% endif %} <br>
+             {% endfor %}
+        <div class='lgS'>
+                    <input type='submit' value='Singup' class='btn btn-primary'>
+
+                    <a href="{% url 'login' %}">login</a>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

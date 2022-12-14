@@ -1,0 +1,32 @@
+body {
+    background-color: hwb(180 83% 7%);
+}
+
+.container {
+    border: 1px solid #0b60813b;
+    margin: 32px 428px;
+    width: 280px;
+    padding: 38px;
+    border-radius: 24px;
+}
+
+.containerS {
+    border: 1px solid #0b60813b;
+    margin: 33px 428px;
+    width: 384px;
+    padding: 14px 76px;
+    border-radius: 27px;
+    height: 550px;
+}
+
+.lgS {
+    margin: 17px 1px
+}
+
+.lg {
+    margin: 2px 36px;
+}
+
+.hea {
+    margin: 4px -6px;
+}
