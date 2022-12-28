@@ -1,9 +1,11 @@
-from django.shortcuts import render,HttpResponseRedirect
+from django.shortcuts import render,HttpResponseRedirect,redirect
 from auction.froms import AuctionFrom,AuctionFromUser
 from auction.models import Auction
 from django.contrib import messages
 from rest_framework import viewsets
 from auction.serializers import AuctionSerializer
+from django.utils import timezone
+
 # Create your views here.
 
 
@@ -41,25 +43,31 @@ def auction_del(request):
 def auct_del(request,pk):
     if request.user.is_authenticated:
         auct = Auction.objects.get(id=pk)
-        auct.bider_user=f'{request.user}'
-        auct.save()
-        if request.method == 'POST':
-            u_price = request.POST.get('auction_running_price')
-            o_price = auct.auction_running_price
-            print("+++++++++++++++++++++++++++")
-            print(auct.bider_user)
-            print("+++++++++++++++++++++++++++")
-            fm = AuctionFromUser(request.POST,instance=auct)
-            if o_price>int(u_price):
-                messages.error(request,'amount is less then curent price ')
-                return render(request,'aut_del.html',{'form':fm,'data':auct})
-            if fm.is_valid():
-                fm.initial= {"bider_user":request.POST[auct.bider_user]}
-                fm.save()
-                messages.success(request,'biding successfully ')
-                return render(request,'aut_del.html',{'form':fm,'data':auct})
-        else:
-            fm = AuctionFromUser()
-            return render(request,'aut_del.html',{'form':fm,'data':auct,'name':request.user})
+        tnow = timezone.now()
+        if tnow >= auct.auction_endDate:
+            messages.error(request,f"{auct.auction_name} auction is sold out please bid other auction ")
+            return redirect('allauctions')
+        else:    
+            auct.bider_user=f'{request.user.email}'
+            if request.method == 'POST':
+                u_price = request.POST.get('auction_running_price')
+                o_price = auct.auction_running_price
+                print(u_price)
+                fm = AuctionFromUser(request.POST,instance=auct)
+                if u_price :
+                    if o_price>int(u_price):
+                        messages.error(request,'amount is less then curent price ')
+                        return render(request,'aut_del.html',{'form':fm,'data':auct})
+                else:
+                    return render(request,'aut_del.html',{'form':fm,'data':auct})
+                if fm.is_valid():
+                    fm.initial= {"bider_user":u_price}
+                    auct.save()
+                    fm.save()
+                    messages.success(request,'biding successfully ')
+                    return render(request,'aut_del.html',{'form':fm,'data':auct})
+            else:
+                fm = AuctionFromUser()
+                return render(request,'aut_del.html',{'form':fm,'data':auct,'name':request.user})
     else:
         return HttpResponseRedirect('/login/')

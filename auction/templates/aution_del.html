@@ -13,6 +13,9 @@
 <body>
     <h2>Auctions list</h2>
     <h2></h2>
+    {% if messages %} {% for msg in messages %}
+    <p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+    {% endfor %} {% endif %}
     {% for d in data %}
     <ul>
         <li>
