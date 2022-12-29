@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'registration',
     'auction',
     'rest_framework',
-    'mailer.apps.MailerConfig'
+   
 ]
 
 MIDDLEWARE = [
@@ -135,11 +135,15 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = env('EMAIL_HOST')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'nitinsoni815@gmail.com'
-EMAIL_HOST_PASSWORD = 'fnhllxxjrlgpftqe'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')

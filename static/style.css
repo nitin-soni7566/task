@@ -30,3 +30,11 @@ body {
 .hea {
     margin: 4px -6px;
 }
+
+.success {
+    color: green;
+}
+
+.error {
+    color: crimson;
+}
