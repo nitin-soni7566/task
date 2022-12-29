@@ -15,3 +15,4 @@ class Auction(models.Model):
     
     def __str__(self):
         return self.auction_name
+
