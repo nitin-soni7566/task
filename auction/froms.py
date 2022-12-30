@@ -1,5 +1,5 @@
 from django import forms
-from auction.models import Auction
+from auction.models import Auction,Winner
 
 class AuctionFrom(forms.ModelForm):
     class Meta:
@@ -22,6 +22,11 @@ class AuctionFromUser(forms.ModelForm):
         fields = ['auction_running_price']
         labels = {'auction_running_price':'Bid price'}
 
+
+class WinnerForm(forms.ModelForm):
+    class Meta:
+        model = Winner
+        fields = ['auction','winner_name','winning_date','email','winning_price']
 
 
  

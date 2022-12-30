@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponseRedirect
+from django.shortcuts import render, HttpResponseRedirect,redirect
 from registration.forms import RegistrationFrom,EditUserProfileForm,EditAdminProfileForm
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, SetPasswordForm,UserChangeForm
@@ -8,34 +8,40 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 
-def singup(request):    
-    if request.method == 'POST':
-        fm = RegistrationFrom(request.POST)
-        if fm.is_valid():
-            fm.save()
-            messages.success(request, 'User Register Successfully ..!')
+def singup(request):
+    if not request.user.is_authenticated:    
+        if request.method == 'POST':
+            fm = RegistrationFrom(request.POST)
+            if fm.is_valid():
+                fm.save()
+                messages.success(request, 'User Register Successfully ..!')
+        else:
+            fm = RegistrationFrom()
+
+        return render(request, 'singup.html', {'form': fm})
+
     else:
-        fm = RegistrationFrom()
-
-    return render(request, 'singup.html', {'form': fm})
-
+        return redirect('profile')
 
 def logIn(request):
-    if request.method == 'POST':
-        fm = AuthenticationForm(request=request, data=request.POST)
-        if fm.is_valid():
-            uname = fm.cleaned_data['username']
-            upass = fm.cleaned_data['password']
-            user = authenticate(request, username=uname, password=upass)
-            if user is not None:
-                messages.success(request, 'Login successfully ..!')
-                login(request, user)
-                return HttpResponseRedirect('/profile/')
+    if not request.user.is_authenticated:
 
+        if request.method == 'POST':
+            fm = AuthenticationForm(request=request, data=request.POST)
+            if fm.is_valid():
+                uname = fm.cleaned_data['username']
+                upass = fm.cleaned_data['password']
+                user = authenticate(request, username=uname, password=upass)
+                if user is not None:
+                    messages.success(request, 'Login successfully ..!')
+                    login(request, user)
+                    return HttpResponseRedirect('/profile/')
+
+        else:
+            fm = AuthenticationForm()
+        return render(request, 'login.html', {'form': fm})
     else:
-        fm = AuthenticationForm()
-    return render(request, 'login.html', {'form': fm})
-
+        return redirect('profile')
 
 def logOut(request):
     logout(request)

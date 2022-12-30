@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponseRedirect,redirect,HttpResponse
-from auction.froms import AuctionFrom,AuctionFromUser
-from auction.models import Auction
+from auction.froms import AuctionFrom,AuctionFromUser,WinnerForm
+from auction.models import Auction,Winner
 from django.contrib import messages
 from rest_framework import viewsets
 from auction.serializers import AuctionSerializer
@@ -50,7 +50,8 @@ def auct_del(request,pk):
             messages.error(request,f"{auct.auction_name} auction is sold out please bid other auction ")
             return redirect('allauctions')
         else:    
-            auct.bider_user=f'{request.user.email}'
+            auct.bider_email=f'{request.user.email}'
+            auct.bider_user_name=f'{request.user}'
             if request.method == 'POST':
                 u_price = request.POST.get('auction_running_price')
                 o_price = auct.auction_running_price
@@ -82,22 +83,33 @@ def queryset_to_list(qs,fields=None, exclude=None):
     return [model_to_dict(x,fields,exclude) for x in qs]
 
 def winner(request):
-    win = Auction.objects.all()
-    ne = queryset_to_list(win)
+    cheak = Winner.objects.all()
+    wins = Auction.objects.all()
+    ne = queryset_to_list(wins)
     t1 = timezone.now()
     for i in ne:
         if t1 >= i['auction_endDate']:
-            auction =i['auction_name']
-            winby = i['bider_user']
-            price = i['auction_running_price']
 
-            send_mail(
-                'auction',
-                f'congratulations you win {auction} you have to pay {price} rs to make yours',
-                settings.EMAIL_HOST_USER,
-                 [f'{winby}'],
-                 fail_silently=False,
+            if i['auction_name'] in cheak:
+                pass
+            else:
+                print("data saving.............")
+                win = Winner(auction=i['auction_name'],
+                winner_name=i['bider_user_name'],
+                email=i['bider_email'],
+                winning_price=i['auction_running_price'],
+                winning_date=i['auction_endDate'])
 
-            )
+                win.save()
+                print("data saved")
+
+                send_mail(
+                    'auction',
+                    f"congratulations you win {i['auction_name']} you have to pay {i['auction_running_price']} rs to make yours",
+                    settings.EMAIL_HOST_USER,
+                    [f"{i['bider_email']}"],
+                    fail_silently=False,
+
+                )
 
     return HttpResponse('<h1>Hello bro</h1>')
