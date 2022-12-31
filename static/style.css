@@ -38,3 +38,7 @@ body {
 .error {
     color: crimson;
 }
+
+.acut {
+    border-radius: 50%;
+}

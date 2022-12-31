@@ -1,4 +1,5 @@
 from django import forms
+
 from auction.models import Auction,Winner
 
 class AuctionFrom(forms.ModelForm):
@@ -17,11 +18,12 @@ class AuctionFrom(forms.ModelForm):
                 visible.field.widget.attrs['class'] = 'form-control'
 
 class AuctionFromUser(forms.ModelForm):
+    auction_running_price= forms.IntegerField(widget= forms.NumberInput
+                           (attrs={'class':'form-control'}))
     class Meta:
         model = Auction
         fields = ['auction_running_price']
         labels = {'auction_running_price':'Bid price'}
-
 
 class WinnerForm(forms.ModelForm):
     class Meta:

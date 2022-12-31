@@ -1,48 +1,34 @@
-{% extends "base.html" %}
-
-
-{% block title %} {% endblock title %}
-
-
-{% block content %}
+{% extends "base.html" %} {% block title %} {% endblock title %} {% block content %}
 <h2>Auction Details</h2>
-<div>
-    <img src="{{data.auction_image}}" alt="" width="50px">
-    <ul>
-        <li>
-            Auction name : {{data.auction_name}}
-        </li>
-        <li>
-            Desc : {{data.auction_desc}}
-        </li>
-        <li>
-            Start Price : {{data.auction_price}} RS.
-        </li>
-        <li>
-            Current Price : {{data.auction_running_price}} Rs.
-        </li>
-        <li>
-            Strat Date : {{data.auction_startDate}}
-        </li>
-        <li>
-            End Date : {{data.auction_endDate}}
-        </li>
-    </ul>
+{% if messages %} {% for msg in messages %}
+<p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+{% endfor %} {% endif %}
 
+
+<div class="card" style="width: 18rem;">
+    <img src="/media/{{data.auction_image}}" class="card-img-top">
+    <div class="card-body">
+        <h5 class="card-title">{{data.auction_name}}</h5>
+        <p class="card-text">{{data.auction_desc}}</p>
+        <p class="card-text">Price : {{data.auction_price}} RS.</p>
+        <p class="card-text">Current Price : {{data.auction_running_price}} Rs.</p>
+        <form  method="post" novalidate class="row g-3">
+            {% csrf_token %} 
+            {% if form.non_field_errors %} 
+            {% for error in form.non_field_errors %} 
+            {{error}} {% endfor %} {% endif %}
+             {% for fm in form %} 
+             <div class="col-auto">
+                 <p class="visually-hidden" >{{fm.label_tag}}</p>  
+                 {{fm}}
+            </div>
+                <p class="error">{{fm.errors|striptags}}</p> {% endfor %}
+            <div class="col-auto">
+            <input type='submit' value='Biding' class="btn btn-primary mb-2 mt-2">
+            </div>
+        </form>
+    </div>
 </div>
-<div>
-    {% if messages %}
-    {% for msg in messages %}
-    <p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
-    {% endfor %}
-    {% endif %}
-    <form action="" method="post" novalidate>
-        {% csrf_token %}
-        {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-        {{error}} {% endfor %} {% endif %} {% for fm in form %} {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br>
-        {% endfor %}
-        <input type='submit' value='Biding'>
-    </form>
-</div>
+
+
 {% endblock content %}
