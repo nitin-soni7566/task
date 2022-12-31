@@ -1,0 +1,38 @@
+
+{% extends 'baseAcution.html' %}
+{% block title %}Auction List{% endblock title %}
+{% block content %}
+<h2>Auctions list</h2>
+    <h2></h2>
+    {% if messages %} {% for msg in messages %}
+    <p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+    {% endfor %} {% endif %}
+    <div class="card-group">
+        <div class="row row-cols-1 row-cols-md-2 g-4" ">
+        
+        {% for d in data %}
+        <div class="col ">
+            <div class="card " style="width: 18rem; ">
+                <img src="/media/{{d.auction_image}}"  width="90px " height="100px ">
+                <div class="card-body shadow ">
+                    <h5 class="card-title ">{{d.auction_name}}</h5>
+                    <p class="card-text ">{{d.auction_desc}}</p>
+                    <p class="card-text "> <b>Price :</b> {{d.auction_price}} RS.</p>
+                    <p class="card-text "><b>Current Price:</b>  {{d.auction_running_price}} Rs.</p>
+                    <div class="col-auto ">
+                        <a href="{% url 'auction_del' d.id %} "> <input type='submit' value='Biding' class="btn btn-primary mb-2 mt-2"></a>
+                    </div>
+                    <div class="card-footer ">
+                        <small class="text-muted ">Auction End : {{d.auction_endDate}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+    <a href="{% url 'allauctions' %}">auction list</a>
+    <a href="{% url 'winner' %}">auction winner</a>
+   
+{% endblock content %}

@@ -37,15 +37,15 @@ def home(request):
         return HttpResponseRedirect('/login/')
 
 
-def auction_del(request):
+def auction_list(request):
     if request.user.is_authenticated:
         auct = Auction.objects.all()
-        return render(request, 'aution_del.html', {'data': auct})
+        return render(request, 'auction_list.html', {'data': auct})
     else:
         return HttpResponseRedirect('/login/')
 
 
-def auct_del(request, pk):
+def auction_detail(request, pk):
     if request.user.is_authenticated:
         auct = Auction.objects.get(id=pk)
         tnow = timezone.now()
@@ -65,18 +65,18 @@ def auct_del(request, pk):
                     if o_price > int(u_price):
                         messages.error(
                             request, 'amount is less then curent price ')
-                        return render(request, 'aut_del.html', {'form': fm, 'data': auct})
+                        return render(request, 'auction_detail.html', {'form': fm, 'data': auct})
                 else:
-                    return render(request, 'aut_del.html', {'form': fm, 'data': auct})
+                    return render(request, 'auction_detail.html', {'form': fm, 'data': auct})
                 if fm.is_valid():
                     fm.initial = {"bider_user": u_price}
                     auct.save()
                     fm.save()
                     messages.success(request, 'biding successfully ')
-                    return render(request, 'aut_del.html', {'form': fm, 'data': auct})
+                    return render(request, 'auction_detail.html', {'form': fm, 'data': auct})
             else:
                 fm = AuctionFromUser()
-                return render(request, 'aut_del.html', {'form': fm, 'data': auct, 'name': request.user})
+                return render(request, 'auction_detail.html', {'form': fm, 'data': auct, 'name': request.user})
     else:
         return HttpResponseRedirect('/login/')
 
