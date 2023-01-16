@@ -1,0 +1,23 @@
+{% extends 'base_auction.html' %} {% block title %}Registration page{% endblock title %} {% block content %}
+
+<div class="container">
+<h2>update Profile</h2>
+<br><br>
+<div>
+    <div>
+        {% if messages %} {% for msg in messages %}
+        <p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+        {% endfor %} {% endif %}
+    </div>
+    <div>
+        <img src="{{data.profile_pic.url}}" alt="" width='120px' class="pro" height="100px" style="border-radius: 50%;">
+    </div>
+
+    <form action="" method="post" novalidate enctype="multipart/form-data">
+        {% csrf_token %} {% if form.non_field_errors %} {% for error in form.non_field_errors %} {{error}} {% endfor %} {% endif %} {% for fm in form %} {{fm.label_tag}} {{fm}} {{fm.errors|striptags}} <br><br> {% endfor %}
+        <input type='submit' value='change' class='btn btn-primary'>
+    </form>
+
+</div>
+</div>
+{% endblock content %}
