@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block title %}Log in{% endblock title %} {% block content %}
+<nav></nav>
+<center>
+    {% if form.non_field_errors %} {% for error in form.non_field_errors %}
+    <small class="text-danger">{{error}}</small> {% endfor %} {% endif %}
+</center>
+<div class="container">
+    <h2 class="hea">LogIn</h2><br>
+    <form method="post" novalidate>
+        {% csrf_token %} {% for fm in form %} {{fm.label_tag}} {{fm}}
+        <span class="text-danger">{{fm.errors|striptags}}</span>
+        <br><br> {% endfor %}
+        <div class='lg'><input type='submit' value='LogIn' class='btn btn-primary'>
+            <a href="{% url 'singup' %}">Singup</a>
+        </div>
+    </form>
+</div>
+{% if messages %} {% for msg in messages %}
+<p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+{% endfor %} {% endif %} {% endblock content %}

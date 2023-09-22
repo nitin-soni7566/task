@@ -2,7 +2,7 @@
 - here users can bid on exsiting auctions & when biding is close winner will notify by email
 # Instructions of runing project in local
 - git clone https://github.com/Blacks7566/task.git  (to clone repo in local)
-- For testing  you have to create .env file in project directory and add these variable into file
+- For testing  you have to create .env file in auction_bidding directory and add these variable into file
 ## .env
 - EMAIL_HOST=smtp.gmail.com
 - EMAIL_HOST_USER=example@gamil.com

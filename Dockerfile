@@ -1,10 +1,13 @@
-FROM python:3
-
-COPY requirements.txt .env /src/
-COPY accounts accounts media static db.sqlite3 manage.py /src/
+FROM python:3.9-slim-bullseye
 
 WORKDIR /src
 
+COPY requirements.txt requirements.txt
+
 RUN pip3 install -r requirements.txt
 
-CMD ["python","manage.py" , "runserver" , "--host", "0.0.0.0", "--port", "8000"]
+COPY . .
+
+EXPOSE 8000
+
+CMD python app/manage.py runserver  

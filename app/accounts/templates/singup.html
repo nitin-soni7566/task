@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% block title %}Registration{% endblock title %}
+{% block content %}
+
+{% if messages %} {% for msg in messages %}
+    <small {% if msg.tags %} class="text-success" {% endif %}>{{msg}}</small>
+    {% endfor %} {% endif %}
+<div class="containerS">
+<h2 class="hea">Registration</h2><br>
+    
+    <form action="" method="post" novalidate>
+        {% csrf_token %} 
+        {% if form.non_field_errors %}
+         {% for error in form.non_field_errors %}
+          <small class="text-danger">{{error}}</small>
+    
+          {% endfor %}
+           {% endif %} 
+           {% for fm in form %}
+            {{fm.label_tag}}<br> {{fm}} {% if fm.errors %}<br><small class="text-danger">{{fm.errors|striptags}}</small>{% endif %} <br>
+             {% endfor %}
+        <div class='lgS'>
+            <input type='submit' value='Singup' class='btn btn-primary ml-1'>
+             <a href="{% url 'login' %}"  class="ml-1">login</a><br>
+            <a href="{% provider_login_url 'google'%}?next=/" class="btn btn-outline-danger m-1">Singup with google</a>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
