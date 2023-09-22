@@ -1,7 +1,7 @@
 FROM python:3
 
 COPY requirements.txt .env /src/
-COPY app /src/app
+COPY accounts accounts media static db.sqlite3 manage.py /src/
 
 WORKDIR /src
 
